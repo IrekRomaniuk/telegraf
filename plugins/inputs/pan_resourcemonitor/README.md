@@ -2,17 +2,14 @@
 
 This input plugin will measures the data place CPU load
 
-## Windows:
 ### Configuration:
 ```
-	## urls to ping
-	urls = ["www.google.com"] # required
+	## firewall ip address
+	ip = [""] # required
 	
-	## number of pings to send per collection (ping -n <COUNT>)
-	count = 4 # required
+	## firewall api key
+	api = [""] # required
 	
-	## Ping timeout, in seconds. 0 means default timeout (ping -w <TIMEOUT>)
-	Timeout = 0
 ```
 ### Measurements & Fields:
 - packets_transmitted ( from ping output )
