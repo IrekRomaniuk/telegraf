@@ -50,17 +50,18 @@ func (_ *Firewall) SampleConfig() string {
 //SELECT "qos_throughput" FROM "qos_throughput" GROUP BY "class", "int" limit 3
 func (p *Firewall) Gather(acc telegraf.Accumulator) error {
         var (
-		tags string
-		fields string
+		tags map[string]string
+		fields map[string]interface{}
 	)
 	for k, v := range p.AE {
 		out, err := p.HTML(p.IP + "&cmd=<show><qos><throughput>" + strconv.Itoa(v) + "</throughput><interface>" + k + "</interface></qos></show>" + p.API)
 		if err != nil { return err }
-		class := parseThroughput("result", out)
+		class, err := parseThroughput("result", out)
+		if err != nil { return err }
 		for i, c := range class {
 			//s, _ := strconv.Atoi(c)
 			fmt.Println(c, i)
-			tags = map[string]string{"class": c, "int": k}
+			tags = map[string]string{"class": c, "int": k,}
 			fields = map[string]interface{}{
 				"qos_throughput": c,
 			}
@@ -85,18 +86,18 @@ func getHTML (url string ) (string, error) {
 	return string(htmlData), nil
 }
 
-func parseThroughput (tag string, htmlData string) []string {
+func parseThroughput (tag string, htmlData string) ([]string, error) {
 	r := regexp.MustCompile("[^\\s]+")
 	htmlCode := strings.NewReader(htmlData)
 	doc, err := goquery.NewDocumentFromReader(htmlCode)
-	if err != nil { log.Fatal(err) }
+	if err != nil { return nil, err  }
 	//s := strings.Split(doc.Find(tag).Text()," ")
 	s := r.FindAllString(doc.Find(tag).Text(),-1)
 	class := []string{}
 	for i:=2;i<=30;i+=4 {
 		class = append(class,s[i])
 	}
-	return class
+	return class, nil
 }
 
 func init() {
@@ -105,7 +106,7 @@ func init() {
 			HTML: getHTML,
 			API: "",
 			IP: "",
-			AE: {"ae1":1,"ae2":0,"ae3":0,},
+			AE: map[string]int{"ae1":1,"ae2":0,"ae3":0,},
 		}
 	})
 }
