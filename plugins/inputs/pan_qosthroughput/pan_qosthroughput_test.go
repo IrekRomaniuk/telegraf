@@ -18,12 +18,12 @@ func TestGather(t *testing.T) {
 	p := Firewall{
 		API: "",
 		IP: "",
-		AE: {"ae1":1,"ae2":0,"ae3":0,},
+		AE: map[string]int{"ae1":1,"ae2":0,"ae3":0,},
 		HTML: mockGetHTML1,
 	}
 
 	p.Gather(&acc)
-	tags := map[string]string{"class": 4, "int": "ae1"}
+	tags := map[string]string{"class": "4", "int": "ae1",}
 	fields := map[string]interface{}{
 		"qos_throughput": 130784,
 	}
