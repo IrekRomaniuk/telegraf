@@ -1,11 +1,11 @@
-package qosthroughput
+package pan_qosthroughput
 
 import (
 	"github.com/PuerkitoBio/goquery"
 	"strings"
 
-	"github.com/irekromaniuk/telegraf"
-	"github.com/irekromaniuk/telegraf/plugins/inputs"
+	"github.com/influxdata/telegraf"
+	"github.com/influxdata/telegraf/plugins/inputs"
 	"strconv"
 	"net/http"
 	"crypto/tls"
@@ -60,8 +60,8 @@ func (p *Firewall) Gather(acc telegraf.Accumulator) error {
 		if err != nil { return err }
 		for i, c := range class {
 			//s, _ := strconv.Atoi(c)
-			fmt.Println(c, i)
-			tags = map[string]string{"class": c, "int": k,}
+			fmt.Println(i, c, k)
+			tags = map[string]string{"class": i, "int": k,}
 			fields = map[string]interface{}{
 				"qos_throughput": c,
 			}
