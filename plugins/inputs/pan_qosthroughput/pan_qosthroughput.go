@@ -59,16 +59,15 @@ func (p *Firewall) Gather(acc telegraf.Accumulator) error {
 		class, err := parseThroughput("result", out)
 		if err != nil { return err }
 		for i, c := range class {
-			fmt.Println(strconv.Itoa(i), c, k)
+			// Print class, throughput and interface name .i.e. 130784 3 ae1
+			fmt.Println(k, strconv.Itoa(i), c, k)
 			tags = map[string]string{"class": strconv.Itoa(i), "int": k,}
 			fields = map[string]interface{}{
 				"qos_throughput": c,
 			}
 		}
-
 		acc.AddFields("qos_throughput", fields, tags)
 	}
-
 	return nil
 }
 
