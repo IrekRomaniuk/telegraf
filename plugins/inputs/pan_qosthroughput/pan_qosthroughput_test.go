@@ -1,11 +1,11 @@
-package qosthroughput
+package pan_qosthroughput
 
 import (
 
 	"testing"
 
 	"github.com/irekromaniuk/telegraf/testutil"
-	"github.com/stretchr/testify/assert"
+	//"github.com/stretchr/testify/assert"
 )
 
 func mockGetHTML1(url string) (string, error) {
@@ -23,7 +23,7 @@ func TestGather(t *testing.T) {
 	}
 
 	p.Gather(&acc)
-	tags := map[string]string{"class": "4", "int": "ae1",}
+	tags := map[string]string{"class": "3", "int": "ae1",}
 	fields := map[string]interface{}{
 		"qos_throughput": 130784,
 	}

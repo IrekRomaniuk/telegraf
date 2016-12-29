@@ -4,30 +4,43 @@ This input plugin will measures the qos throughput
 
 ### Configuration:
 ```
-	## firewall ip address
-	ip = [""] # required
-	
-	## firewall api key
-	api = [""] # required
-	
+      ## firewall's API key
+      api = "" # required
+      ## IP address of firewall
+      ip = "" # required
+      ## Names of interfaces and node-ids
+      int = {"ae1":1,"ae2":0,"ae3":0,}	
 ```
 ### Measurements & Fields:
-- packets_transmitted ( from ping output )
-- reply_received ( increasing only on valid metric from echo replay, eg. 'Destination net unreachable' reply will increment packets_received but not reply_received )
-- packets_received ( from ping output )
-- percent_reply_loss ( compute from packets_transmitted and reply_received )
-- percent_packets_loss ( compute from packets_transmitted and packets_received )
-- errors ( when host can not be found or wrong prameters is passed to application )
-- response time
-    - average_response_ms ( compute from minimum_response_ms and maximum_response_ms )
-    - minimum_response_ms ( from ping output )
-    - maximum_response_ms ( from ping output )
+- qos_throughput (kbps, per qos class and interface). Tested on PAN Model 5060 s/w 7.1.2
+admin@PA-5060(active)> show qos throughput 
+  <value>  <0-65535> Show throughput (last 3 seconds) of all classes under given node-id
+
+admin@PA-5060(active)> show qos throughput 1 interface 
+  ae1      ae1
+  ae2      ae2
+  ae3      ae3
+  <value>  Show for given interface
+
+admin@PA-5060(active)> show qos throughput 1 interface ae1
+Class 1              0 kbps
+Class 2              0 kbps
+Class 3              0 kbps
+Class 4         502811 kbps
+Class 5              0 kbps
+Class 6              0 kbps
+Class 7            190 kbps
+Class 8             39 kbps
 	
 ### Tags:
 - server
 
 ### Example Output:
 ```
-* Plugin: ping, Collection 1
-ping,host=WIN-PBAPLP511R7,url=www.google.com average_response_ms=7i,maximum_response_ms=9i,minimum_response_ms=7i,packets_received=4i,packets_transmitted=4i,percent_packet_loss=0,percent_reply_loss=0,reply_received=4i 1469879119000000000
+> SELECT "qos_throughput" FROM "qos_throughput" GROUP BY "class", "int" limit 1
+name: qos_throughput
+tags: class=3, int=ae2
+time                    qos_throughput
+----                    --------------
+1482767284000000000     12426
 ```
