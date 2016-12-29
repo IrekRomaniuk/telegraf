@@ -47,7 +47,7 @@ const sampleConfig = `
 func (_ *Firewall) SampleConfig() string {
 	return sampleConfig
 }
-//SELECT "qos_throughput" FROM "qos_throughput" GROUP BY "class", "int" limit 3
+//SELECT "qos_throughput" FROM "qos_throughput" GROUP BY "class", "int" limit 1
 func (p *Firewall) Gather(acc telegraf.Accumulator) error {
         var (
 		tags map[string]string
@@ -59,9 +59,8 @@ func (p *Firewall) Gather(acc telegraf.Accumulator) error {
 		class, err := parseThroughput("result", out)
 		if err != nil { return err }
 		for i, c := range class {
-			//s, _ := strconv.Atoi(c)
-			fmt.Println(i, c, k)
-			tags = map[string]string{"class": i, "int": k,}
+			fmt.Println(strconv.Itoa(i), c, k)
+			tags = map[string]string{"class": strconv.Itoa(i), "int": k,}
 			fields = map[string]interface{}{
 				"qos_throughput": c,
 			}
