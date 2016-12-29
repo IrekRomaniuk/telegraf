@@ -13,6 +13,7 @@ This input plugin will measures the qos throughput
 ```
 ### Measurements & Fields:
 - qos_throughput (kbps, per qos class and interface). Tested on PAN Model 5060 s/w 7.1.2
+```
 admin@PA-5060(active)> show qos throughput 
   <value>  <0-65535> Show throughput (last 3 seconds) of all classes under given node-id
 
@@ -31,9 +32,10 @@ Class 5              0 kbps
 Class 6              0 kbps
 Class 7            190 kbps
 Class 8             39 kbps
+```
 	
 ### Tags:
-- server
+- class, int
 
 ### Example Output:
 ```
