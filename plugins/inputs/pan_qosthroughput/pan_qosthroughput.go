@@ -11,7 +11,6 @@ import (
 	"crypto/tls"
 	"io/ioutil"
 	"regexp"
-	"fmt"
 )
 
 type GetHTML func(url string) (string, error)
@@ -60,7 +59,7 @@ func (p *Firewall) Gather(acc telegraf.Accumulator) error {
 		if err != nil { return err }
 		for i, c := range class {
 			// Print class, throughput and interface name .i.e. 130784 3 ae1
-			fmt.Println(k, strconv.Itoa(i), c, k)
+			// fmt.Println(k, strconv.Itoa(i), c, k)
 			tags = map[string]string{"class": strconv.Itoa(i), "int": k,}
 			fields = map[string]interface{}{
 				"qos_throughput": c,
