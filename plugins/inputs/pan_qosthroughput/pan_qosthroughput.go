@@ -77,7 +77,7 @@ func getHTML (url string ) (string, error) {
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 	client := &http.Client{Transport: tr}
-	fmt.Println(url)
+	fmt.Printf("The url is %v", url)
 	resp, err := client.Get(url)
 	if err != nil { return "", err }
 	htmlData, err := ioutil.ReadAll(resp.Body)
