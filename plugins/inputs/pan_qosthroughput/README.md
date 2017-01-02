@@ -9,7 +9,7 @@ This input plugin will measures the qos throughput
       ## IP address of firewall
       ip = "" # required
       ## Names of interfaces and node-ids
-      int = {"ae1":1,"ae2":0,"ae3":0,}	
+      int = ["ae1:1","ae2:0","ae3:0",]	
 ```
 ### Measurements & Fields:
 - qos_throughput (kbps, per qos class and interface). Tested on PAN Model 5060 s/w 7.1.2
