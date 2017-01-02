@@ -104,7 +104,7 @@ func init() {
 			HTML: getHTML,
 			API: "",
 			IP: "",
-			INT: []string{"ae1:1","ae2:0","ae3:0",},
+			//INT: []string{"ae1:1","ae2:0","ae3:0",},
 		}
 	})
 }
