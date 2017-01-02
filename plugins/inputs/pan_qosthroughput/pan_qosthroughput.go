@@ -3,7 +3,7 @@ package pan_qosthroughput
 import (
 	"github.com/PuerkitoBio/goquery"
 	"strings"
-
+	. "github.com/IrekRomaniuk/lib-go/slice2map"
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/inputs"
 	"strconv"
@@ -23,7 +23,7 @@ type Firewall struct {
 	IP string
 
 	// Names of interfaces and qos node-ids
-	AE map[string]int
+	INT []string
 
 	// API call result
 	HTML GetHTML
@@ -40,7 +40,7 @@ const sampleConfig = `
   ## IP address of firewall
   ip = "" # required
   ## Names of interfaces and node-ids
-  int = {"ae1":1,"ae2":0,"ae3":0,}
+  int = ["ae1:1","ae2:0","ae3:0"]
 `
 
 func (_ *Firewall) SampleConfig() string {
@@ -52,7 +52,8 @@ func (p *Firewall) Gather(acc telegraf.Accumulator) error {
 		tags map[string]string
 		fields map[string]interface{}
 	)
-	for k, v := range p.AE {
+	intMap := Slice2Map(p.INT)
+	for k, v := range intMap {  //http://stackoverflow.com/questions/38579485/golang-convert-slices-into-map
 		out, err := p.HTML(p.IP + "&cmd=<show><qos><throughput>" + strconv.Itoa(v) + "</throughput><interface>" + k + "</interface></qos></show>" + p.API)
 		if err != nil { return err }
 		class, err := parseThroughput("result", out)
@@ -103,7 +104,7 @@ func init() {
 			HTML: getHTML,
 			API: "",
 			IP: "",
-			AE: map[string]int{"ae1":1,"ae2":0,"ae3":0,},
+			INT: []string{"ae1:1","ae2:0","ae3:0",},
 		}
 	})
 }
