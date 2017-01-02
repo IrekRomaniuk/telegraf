@@ -11,6 +11,7 @@ import (
 	"crypto/tls"
 	"io/ioutil"
 	"regexp"
+	"fmt"
 )
 
 type GetHTML func(url string) (string, error)
@@ -55,6 +56,7 @@ func (p *Firewall) Gather(acc telegraf.Accumulator) error {
 	intMap := Slice2Map(p.INT)
 	for k, v := range intMap {  //http://stackoverflow.com/questions/38579485/golang-convert-slices-into-map
 		out, err := p.HTML(p.IP + "&cmd=<show><qos><throughput>" + strconv.Itoa(v) + "</throughput><interface>" + k + "</interface></qos></show>" + p.API)
+		fmt.Println(p.IP + "&cmd=<show><qos><throughput>" + strconv.Itoa(v) + "</throughput><interface>" + k + "</interface></qos></show>" + p.API)
 		if err != nil { return err }
 		class, err := parseThroughput("result", out)
 		if err != nil { return err }
