@@ -55,8 +55,9 @@ func (p *Firewall) Gather(acc telegraf.Accumulator) error {
 	)
 	intMap := Slice2Map(p.INT)
 	addr := "https://" + p.IP + "/esp/restapi.esp?type=op"
+	key := "&key=" + p.API
 	for k, v := range intMap {  //http://stackoverflow.com/questions/38579485/golang-convert-slices-into-map
-		out, err := p.HTML(addr + "&cmd=<show><qos><throughput>" + strconv.Itoa(v) + "</throughput><interface>" + k + "</interface></qos></show>" + p.API)
+		out, err := p.HTML(addr + "&cmd=<show><qos><throughput>" + strconv.Itoa(v) + "</throughput><interface>" + k + "</interface></qos></show>" + key)
 		if err != nil { return err }
 		class, err := parseThroughput("result", out)
 		if err != nil { return err }
