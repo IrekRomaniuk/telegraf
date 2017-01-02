@@ -20,7 +20,7 @@ func TestGather(t *testing.T) {
 	p := Firewall{
 		API: "",
 		IP: "",
-		AE: map[string]int{"ae1":1,},
+		INT: []string{"ae1:1",},
 		HTML: mockGetHTML1,
 	}
 
@@ -28,8 +28,10 @@ func TestGather(t *testing.T) {
 	assert.NoError(t, err)
 	metric, ok := acc.Get("qos_throughput")
 	require.True(t, ok)
+	//fmt.Println(len(metric.Tags))  // 2
 	qos_throughput := metric.Fields["qos_throughput"]
-	fmt.Printf("qos_throughput is %s", qos_throughput)
+	//fmt.Println(metric.Tags["class"],metric.Tags["int"]) //7 ae1
+	fmt.Printf("qos_throughput is %s\n", qos_throughput)
 	tags := map[string]string{"class": "7", "int": "ae1",}
 	fields := map[string]interface{}{}
 	fields["qos_throughput"] = qos_throughput
