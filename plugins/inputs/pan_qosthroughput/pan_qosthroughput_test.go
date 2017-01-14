@@ -23,7 +23,6 @@ func TestGather(t *testing.T) {
 		INT: []string{"ae1:1",},
 		HTML: mockGetHTML1,
 	}
-
 	err := p.Gather(&acc)
 	assert.NoError(t, err)
 	metric, ok := acc.Get("qos_throughput")

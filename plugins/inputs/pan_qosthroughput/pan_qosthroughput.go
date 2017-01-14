@@ -63,8 +63,9 @@ func (p *Firewall) Gather(acc telegraf.Accumulator) error {
 		if err != nil { return err }
 		for i, c := range class {
 			// Print class, throughput and interface name .i.e. 130784 3 ae1
-			// fmt.Println(k, strconv.Itoa(i), c, k)
+			// fmt.Println(k, strconv.Itoa(i), c)
 			tags = map[string]string{"class": strconv.Itoa(i), "int": k,}
+			fmt.Print(tags)
 			fields = map[string]interface{}{
 				"qos_throughput": c,
 			}
@@ -79,7 +80,7 @@ func getHTML (url string ) (string, error) {
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 	client := &http.Client{Transport: tr}
-	fmt.Printf("The url is %v", url)
+	//fmt.Printf("The url is %v", url)
 	resp, err := client.Get(url)
 	if err != nil { return "", err }
 	htmlData, err := ioutil.ReadAll(resp.Body)
