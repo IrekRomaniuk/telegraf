@@ -11,7 +11,6 @@ import (
 	"crypto/tls"
 	"io/ioutil"
 	"regexp"
-	"fmt"
 )
 
 type GetHTML func(url string) (string, error)
@@ -49,11 +48,10 @@ func (_ *Firewall) SampleConfig() string {
 }
 //SELECT "qos_throughput" FROM "qos_throughput" GROUP BY "class", "int" limit 1
 func (p *Firewall) Gather(acc telegraf.Accumulator) error {
-        var (
-		tags map[string]string
-		fields map[string]interface{}
-	)
+	tags := make(map[string]string)
+	fields := make(map[string]interface{})
 	intMap := Slice2Map(p.INT)
+	//fmt.Printf("%v\n", intMap)
 	addr := "https://" + p.IP + "/esp/restapi.esp?type=op"
 	key := "&key=" + p.API
 	for k, v := range intMap {  //http://stackoverflow.com/questions/38579485/golang-convert-slices-into-map
@@ -61,16 +59,16 @@ func (p *Firewall) Gather(acc telegraf.Accumulator) error {
 		if err != nil { return err }
 		class, err := parseThroughput("result", out)
 		if err != nil { return err }
+		//fmt.Printf("%v\n",class)
 		for i, c := range class {
 			// Print class, throughput and interface name .i.e. 130784 3 ae1
 			// fmt.Println(k, strconv.Itoa(i), c)
-			tags = map[string]string{"class": strconv.Itoa(i), "int": k,}
-			fmt.Print(tags)
-			fields = map[string]interface{}{
-				"qos_throughput": c,
-			}
+			tags["class"] = strconv.Itoa(i)
+			tags["int"] = k
+			fields["qos_throughput"] = c
+			//fmt.Printf("%v %v\n",fields, tags)
+			acc.AddFields("qos_throughput", fields, tags)
 		}
-		acc.AddFields("qos_throughput", fields, tags)
 	}
 	return nil
 }
